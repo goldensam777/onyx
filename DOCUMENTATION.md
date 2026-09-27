@@ -249,6 +249,21 @@ else:
 
 | # | Topic | Status |
 |---|-------|--------|
-| 1 | Mutability (can a variable/attribute be reassigned after declaration? const vs. mutable?) |undone |
-| 2 | Scoping & closures (how a `lambda` captures variables from its enclosing scope) | undone |
-| 3 | Error model (what an error actually *is* in onyx: a type? a code+message pair? a `class`?) | undone |
+| 1 | Expression semantics (operators, precedence, function calls, assignment, and evaluation order) | undone |
+| 2 | Variable mutability (can variables and attributes be reassigned? const vs. mutable?) | undone |
+| 3 | Scoping and closures (how `lambda` captures variables from its enclosing scope) | undone |
+| 4 | Functions and closures (named functions, return behavior, recursion, and closure lifetime) | undone |
+| 5 | Type system (type inference, explicit annotations, generic types, and compatibility rules) | undone |
+| 6 | Numeric promotion (conversion rules between `int`, `real`, and `complex`, including precision and overflow) | undone |
+| 7 | Error model (whether an error is a type, code/message pair, class, or another value) | undone |
+| 8 | `try`/`fallback` semantics (error propagation, rollback behavior, and access to the original error) | undone |
+| 9 | Class and object model (constructors, fields, methods, `self`, inheritance, and composition) | undone |
+| 10 | `#from`, `#parents`, and `#format` semantics (whether they are keywords, directives, or metadata annotations) | undone |
+| 11 | Member terminology (formal definition of “stranger” and the distinction between instance, class, and external variables) | undone |
+| 12 | Tensor indexing and slicing (index syntax, bounds checking, negative indices, and slice semantics) | undone |
+| 13 | Tensor operations (broadcasting, reshaping, reductions, concatenation, and elementwise versus matrix multiplication) | undone |
+| 14 | Tensor shape system (compile-time versus runtime dimensions and shape mismatch behavior) | undone |
+| 15 | Memory and execution model (layout, ownership, allocation, copying, views, and performance guarantees) | undone |
+| 16 | Modules and interoperability (imports, packages, foreign-function interfaces, and external libraries) | undone |
+| 17 | Diagnostics and tooling (compiler errors, warnings, formatting, testing, debugging, and documentation conventions) | undone |
+| 18 | Implementation roadmap (lexer, parser, AST, type checker, interpreter/compiler, standard library, and test suite) | undone |
