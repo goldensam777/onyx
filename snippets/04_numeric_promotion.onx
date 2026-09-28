@@ -1,0 +1,11 @@
+(< Numeric values widen along int -> real -> complex -> quaternion. >)
+
+integer: int = 2
+real_value: real = 0.5
+complex_value: complex = 1 + 3i
+
+sum: real = integer + real_value
+complex_sum: complex = integer + complex_value
+
+print("sum = {sum}") (< Expected output: sum = 2.5 >)
+print("complex sum = {complex_sum}") (< Expected output: complex sum = 3 + 3i >)

@@ -1,0 +1,13 @@
+(< Named functions declare their return type with ->.
+   => returns immediately from the current function. >)
+
+add(a: int, b: int) -> int:
+    => a + b
+
+absolute(n: int) -> int:
+    if n < 0:
+        => -n
+    => n
+
+print("2 + 3 = {add(2, 3)}") (< Expected output: 2 + 3 = 5 >)
+print("absolute(-8) = {absolute(-8)}") (< Expected output: absolute(-8) = 8 >)

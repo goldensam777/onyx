@@ -1,0 +1,23 @@
+(< A Micrograd-inspired value container.
+   Class construction and instance semantics are still being specified. >)
+
+class Value:
+    #from(* data: real, label: string = "")
+    .grad: real = 0.0
+    #format = "Value(data={.data}, grad={.grad}, label={.label})"
+
+seed: Value = Value(2.0, "input")
+weight: Value = Value(3.0, "weight")
+bias: Value = Value(-1.0, "bias")
+
+(< These values model y = xw + b.
+   Arithmetic on Value instances will be added with the class/object model. >)
+input_data: real = 2.0
+weight_data: real = 3.0
+bias_data: real = -1.0
+output_data: real = input_data * weight_data + bias_data
+
+print("seed = {seed}")
+print("weight = {weight}")
+print("bias = {bias}")
+print("forward result = {output_data}") (< Expected output: 5.0 >)

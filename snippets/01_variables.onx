@@ -1,0 +1,6 @@
+(< Variables are mutable by default. >)
+
+value: int = 1
+value = 2
+
+print("value = {value}") (< Expected output: value = 2 >)

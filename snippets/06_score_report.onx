@@ -1,0 +1,28 @@
+(< A small data-processing program: normalize scores and print a report. >)
+
+clamp(score: real, minimum: real, maximum: real) -> real:
+    if score < minimum:
+        => minimum
+    elif score > maximum:
+        => maximum
+    => score
+
+percentage(score: real, total: real) -> real:
+    if total == 0:
+        => 0.0
+    => (score / total) * 100.0
+
+grade(score: real) -> string:
+    if score >= 80.0:
+        => "excellent"
+    elif score >= 50.0:
+        => "passed"
+    => "needs improvement"
+
+raw_score: real = 42.0
+maximum: real = 50.0
+result: real = percentage(raw_score, maximum)
+safe_result: real = clamp(result, 0.0, 100.0)
+
+print("Score: {safe_result}%")
+print("Status: {grade(safe_result)}")

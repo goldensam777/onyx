@@ -1,0 +1,27 @@
+(< A small application-style decision flow. >)
+
+priority_label(priority: int) -> string:
+    match priority:
+        case 1:
+            => "critical"
+        case 2:
+            => "high"
+        case 3:
+            => "normal"
+        default:
+            => "low"
+
+can_start(priority: int, service_ready: bool) -> bool:
+    if not service_ready:
+        => false
+    => priority <= 3
+
+task_name: string = "database-backup"
+priority: int = 2
+service_ready: bool = true
+label: string = priority_label(priority)
+
+if can_start(priority, service_ready):
+    print("Starting {task_name} ({label} priority)")
+else:
+    print("Deferring {task_name} ({label} priority)")

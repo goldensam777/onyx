@@ -1,0 +1,11 @@
+(< quaternion(real, i, j, k) constructs a + bi + cj + dk. >)
+
+i_unit: quaternion = quaternion(0, 1, 0, 0)
+j_unit: quaternion = quaternion(0, 0, 1, 0)
+
+left: quaternion = i_unit * j_unit
+right: quaternion = j_unit * i_unit
+
+print("i * j = {left}")  (< Expected output: k >)
+print("j * i = {right}") (< Expected output: -k >)
+print("norm of i = {abs(i_unit)}") (< Expected output: norm of i = 1.0 >)

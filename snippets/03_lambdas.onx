@@ -1,0 +1,7 @@
+(< Lambdas use parentheses around their parameter list and = before the body. >)
+
+increment = lambda (n: int) = n + 1
+no_op = lambda () = none
+
+print("increment(8) = {increment(8)}") (< Expected output: increment(8) = 9 >)
+print("no_op() = {no_op()}")
