@@ -1,0 +1,77 @@
+(< Basic algorithms for testing Onyx syntax.
+   This draft assumes: while loops, arr indexing with [], arr.length,
+   mutable arr parameters, and // for integer division. >)
+
+linear_search(values: arr[int] <n>, target: int) -> int:
+    index: int = 0
+    while index < values.length:
+        if values[index] == target:
+            => index
+        index = index + 1
+    => -1
+
+binary_search(values: arr[int] <n>, target: int) -> int:
+    left: int = 0
+    right: int = values.length - 1
+    while left <= right:
+        middle: int = (left + right) // 2
+        if values[middle] == target:
+            => middle
+        elif values[middle] < target:
+            left = middle + 1
+        else:
+            right = middle - 1
+    => -1
+
+selection_sort(values: arr[int] <n>) -> arr[int] <n>:
+    index: int = 0
+    while index < values.length - 1:
+        minimum: int = index
+        cursor: int = index + 1
+        while cursor < values.length:
+            if values[cursor] < values[minimum]:
+                minimum = cursor
+            cursor = cursor + 1
+        temporary: int = values[index]
+        values[index] = values[minimum]
+        values[minimum] = temporary
+        index = index + 1
+    => values
+
+insertion_sort(values: arr[int] <n>) -> arr[int] <n>:
+    index: int = 1
+    while index < values.length:
+        current: int = values[index]
+        cursor: int = index - 1
+        while cursor >= 0 and values[cursor] > current:
+            values[cursor + 1] = values[cursor]
+            cursor = cursor - 1
+        values[cursor + 1] = current
+        index = index + 1
+    => values
+
+bubble_sort(values: arr[int] <n>) -> arr[int] <n>:
+    limit: int = values.length - 1
+    while limit > 0:
+        index: int = 0
+        while index < limit:
+            if values[index] > values[index + 1]:
+                temporary: int = values[index]
+                values[index] = values[index + 1]
+                values[index + 1] = temporary
+            index = index + 1
+        limit = limit - 1
+    => values
+
+factorial(value: int) -> int:
+    if value <= 1:
+        => 1
+    => value * factorial(value - 1)
+
+numbers: arr[int] <5> = [64, 25, 12, 22, 11]
+sorted: arr[int] <5> = selection_sort(numbers)
+position: int = linear_search(sorted, 22)
+
+print("sorted = {sorted}")       (< Expected: [11, 12, 22, 25, 64] >)
+print("position of 22 = {position}") (< Expected: 2 >)
+print("factorial(5) = {factorial(5)}") (< Expected: 120 >)
