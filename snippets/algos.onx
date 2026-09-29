@@ -1,6 +1,5 @@
 (< Basic algorithms for testing Onyx syntax.
-   This draft assumes: while loops, arr indexing with [], arr.length,
-   mutable arr parameters, and // for integer division. >)
+   Array parameters are mutable in place; // is integer division. >)
 
 linear_search(values: arr[int] <n>, target: int) -> int:
     index: int = 0

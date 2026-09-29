@@ -157,6 +157,8 @@ The exact treatment of precision, overflow, integer division, and division by ze
 - `-` and `*` operate on numeric values according to numeric promotion.
 - `/` operates on numeric values according to numeric promotion. Division of two
   integers yields a `real` result.
+- `//` is integer division. It accepts integers only and returns an `int`.
+  Its rounding rule for negative operands remains part of the numeric model.
 - `%` is the integer remainder operator. It accepts integers only. For a positive
   divisor `b`, `a % b` is the unique remainder `r` such that
   `a = b * q + r` and `0 <= r < b`. Division by zero is an error.
@@ -215,8 +217,8 @@ The currently defined precedence, from highest to lowest, is:
 Arithmetic operators at the same precedence level are evaluated from left to
 right, except `^`.
 
-All operations on `arr`, including elementwise operations, matrix products,
-and broadcasting, remain to be specified separately.
+Array operations, including elementwise operations, matrix products, and
+broadcasting, remain to be specified separately.
 
 #### Quaternions
 
@@ -297,6 +299,36 @@ Note: `arr` is a tensor abstraction with independent axes. It is separate from
 hypercomplex-number systems such as quaternions and, potentially in the future,
 Clifford algebras.
 
+### Indexing, shape, and mutation
+
+An `arr` is indexed with one integer coordinate per axis. The number of indices
+must equal the tensor rank:
+
+```onyx
+values[index]                    (< arr[T] <n> >)
+values[layer, line, index]       (< arr[T] <d1, d2, d3> >)
+```
+
+An index outside the bounds of its axis is an error. Supplying too few or too
+many indices is also an error. An indexed cell can be read or written when the
+assigned value is compatible with the array element type.
+
+```onyx
+values[index] = value
+```
+
+Every array exposes `.shape`, which represents its full shape. A rank-one array
+also exposes `.length`, which is its sole dimension:
+
+```onyx
+numbers: arr[int] <5> = [64, 25, 12, 22, 11]
+size: int = numbers.length
+dimensions = numbers.shape
+```
+
+**To decide:** the type and formatting of `.shape`, negative indices, slices,
+and views.
+
 ## 5. Language constructs
 
 ### Lambdas
@@ -339,6 +371,19 @@ display(text: string) -> none:
 
 `=>` is a return construct, not a lambda syntax. A function return type is
 checked against the type of every returned expression.
+
+An `arr` parameter grants the function mutable access to the passed array
+storage. Mutations therefore affect the caller's array; no `mut` marker is
+required in the first version.
+
+```onyx
+selection_sort(values: arr[int] <n>) -> arr[int] <n>:
+    values[0] = 0
+    => values
+```
+
+After `selection_sort(numbers)`, `numbers` contains the modified values. The
+precise model for assignment, aliasing, copies, and views remains open.
 
 `::` is reserved for a future `process` construct and has no meaning in the
 current language.
@@ -420,6 +465,64 @@ else:
     print("{real_var} is equal to 1")
 ```
 
+### `while` loops
+
+A `while` loop repeats its body while its condition evaluates to `bool`.
+
+```onyx
+index: int = 0
+while index < 3:
+    print("index = {index}")
+    index = index + 1
+```
+
+`=> expression` inside a loop returns from the enclosing function immediately.
+It consequently exits every active loop before control leaves the function.
+
+`:break` exits only the innermost active loop. When a `while` is used as an
+expression, `:break value` exits that loop and makes `value` the result of the
+`while` expression. A `while` that ends through `:break` without a value, or
+whose condition becomes `false`, evaluates to `none`.
+
+```onyx
+current: int = 5
+
+position: int = while true:
+    if current >= 9:
+        :break current
+    current += 1
+```
+
+`continue` is reserved for future design.
+
+### Blocks, scope, and lifetime
+
+Every indented block creates a child lexical scope. A child scope can read and
+modify variables declared in any enclosing parent scope. A parent scope cannot
+access variables declared only in one of its child scopes.
+
+```onyx
+total: int = 0
+
+while total < 3:
+    increment: int = 1
+
+    if total >= 0:
+        total += increment
+
+print(total)     (< Valid: 3 >)
+print(increment) (< Error: increment is out of scope >)
+```
+
+Scope determines name visibility. Lifetime determines how long a value must
+remain available in memory; its exact implementation is part of the memory
+model and may be managed by the compiler. A value can outlive its declaring
+block only through an explicit mechanism such as a function return or a closure
+capture.
+
+**To decide:** shadowing, closure capture rules, and the exact lifetime and
+aliasing model for values that escape a block.
+
 ## 6. Object-model conventions and concepts
 
 - The `stranger` concept
@@ -474,7 +577,7 @@ else:
 | -- | ----- | ------ |
 | 1 | Expression semantics (operators, precedence, function calls, assignment, and evaluation order) | partially defined |
 | 2 | Variable mutability (can variables and attributes be reassigned? const vs. mutable?) | partially defined |
-| 3 | Scoping and closures (how `lambda` captures variables from its enclosing scope) | undone |
+| 3 | Scoping and closures (how `lambda` captures variables from its enclosing scope) | partially defined |
 | 4 | Functions and closures (named functions, return behavior, recursion, and closure lifetime) | partially defined |
 | 5 | Type system (type inference, explicit annotations, generic types, and compatibility rules) | undone |
 | 6 | Numeric promotion (conversion rules between `int`, `real`, `complex`, and `quaternion`, including precision and overflow) | partially defined |
@@ -483,10 +586,10 @@ else:
 | 9 | Class and object model (constructors, fields, methods, `self`, inheritance, and composition) | undone |
 | 10 | `#from`, `#parents`, and `#format` semantics (whether they are keywords, directives, or metadata annotations) | undone |
 | 11 | Member terminology (formal definition of “stranger” and the distinction between instance, class, and external variables) | undone |
-| 12 | Tensor indexing and slicing (index syntax, bounds checking, negative indices, and slice semantics) | undone |
+| 12 | Tensor indexing and slicing (index syntax, bounds checking, negative indices, and slice semantics) | partially defined |
 | 13 | Tensor operations (broadcasting, reshaping, reductions, concatenation, and elementwise versus matrix multiplication) | undone |
 | 14 | Tensor shape system (compile-time versus runtime dimensions and shape mismatch behavior) | undone |
-| 15 | Memory and execution model (layout, ownership, allocation, copying, views, and performance guarantees) | undone |
+| 15 | Memory and execution model (layout, ownership, allocation, copying, views, and performance guarantees) | partially defined |
 | 16 | Modules and interoperability (imports, packages, foreign-function interfaces, and external libraries) | undone |
 | 17 | Diagnostics and tooling (compiler errors, warnings, formatting, testing, debugging, and documentation conventions) | undone |
 | 18 | Implementation roadmap (lexer, parser, AST, type checker, interpreter/compiler, standard library, and test suite) | undone |
